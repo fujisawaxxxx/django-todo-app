@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<div class="p-3 mb-5">
+    <h1>TodoApp</h1>
+    <p>タスクを作成しましょう</p>
+</div>
+{% endblock header %}
+
+
+{% block content %}
+<!-- ↓影をつける -->
+<div class="shadow-sm p-3 mb-5 bg-body rounded">
+
+<!-- ↓ログインしているか判断 -->
+{% if user.is_authenticated %}
+
+<!-- ↓右寄せ -->
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+  <!-- ↓新規作成のボタン -->
+  <a href="{% url 'task-new'%}" class="btn btn-outline-success me-3">新規作成</a>
+</div>
+
+{%endif %}
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">タイトル</th>
+        <th scope="col">締切</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for task in object_list %}
+        <tr>
+            <td>
+              <!-- ↓それぞれのタスクの詳細ページに飛ぶ -->
+              <a href="{% url 'task-detail' task.pk %}">{{ task.title}}</a> 
+            </td>
+            <td>{{ task.deadline }}</td>
+            <!-- ↓ログインしているか判断 -->
+            {% if user.is_authenticated %}
+            <td>
+              <a href="{% url 'task-edit' task.pk %}">編集</a>
+              <a href="{% url 'task-delete' task.pk %}">削除</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+{% endblock content %}
